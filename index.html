@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Cleaner</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; }
+        .container { border: 1px solid #ccc; padding: 20px; border-radius: 8px; box-shadow: 2px 2px 10px #eee; }
+        input { padding: 8px; width: 200px; margin-bottom: 10px; }
+        .result { font-weight: bold; color: #007bff; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>Phone Formatter</h3>
+    <input type="text" id="phoneInput" placeholder="Enter (561) 929-5978">
+    <p>Cleaned: <span id="cleanResult" class="result"></span></p>
+</div>
+
+<script>
+    const input = document.getElementById('phoneInput');
+    const result = document.getElementById('cleanResult');
+
+    input.addEventListener('input', (e) => {
+        const rawValue = e.target.value;
+        // The Magic: Remove all non-digits
+        const cleaned = rawValue.replace(/\D/g, "");
+        result.textContent = cleaned;
+    });
+</script>
+
+</body>
+</html>

@@ -5,17 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phone Number Cleaner</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 350px; }
-        h2 { margin-top: 0; color: #333; font-size: 1.2rem; }
-        .field-group { margin-bottom: 1.5rem; }
+        body { 
+            background-color: #f4f7f6; 
+            display: flex; 
+            justify-content: center; 
+            padding-top: 15vh; /* Moves form to roughly 30% from the top */
+            margin: 0; 
+        }
+        .card { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            width: 450px; 
+        }
+        h2 { margin-top: 0; color: #333; font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .field-group { margin-bottom: 1.2rem; }
         label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
-        input[readonly] { background-color: #f9f9f9; color: #007bff; font-weight: bold; border-color: #cee3ff; }
-        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+        
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+        }
+
+        /* Container to put Input and Button side-by-side */
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        input[readonly] { 
+            background-color: #f9f9f9; 
+            color: #007bff; 
+            font-weight: bold; 
+            border-color: #cee3ff; 
+            flex-grow: 1; /* Makes input take up remaining space */
+        }
+
+        button { 
+            padding: 10px 20px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 0.9rem; 
+            white-space: nowrap; /* Prevents text from wrapping */
+            transition: background 0.2s; 
+        }
         button:hover { background-color: #0056b3; }
-        button:active { transform: scale(0.98); }
-        .copy-status { font-size: 0.8rem; text-align: center; margin-top: 8px; color: #28a745; height: 1rem; }
+        
+        .copy-status { 
+            font-size: 0.8rem; 
+            margin-top: 8px; 
+            color: #28a745; 
+            height: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -30,11 +79,12 @@
 
     <div class="field-group">
         <label for="resultInput">Cleaned Result</label>
-        <input type="text" id="resultInput" readonly placeholder="5619295978">
+        <div class="input-row">
+            <input type="text" id="resultInput" readonly placeholder="5619295978">
+            <button onclick="copyToClipboard()">Copy</button>
+        </div>
+        <div id="status" class="copy-status"></div>
     </div>
-
-    <button onclick="copyToClipboard()">Copy Result</button>
-    <div id="status" class="copy-status"></div>
 </div>
 
 <script>
@@ -42,28 +92,20 @@
     const resultInput = document.getElementById('resultInput');
     const status = document.getElementById('status');
 
-    // Clean number as you type
     phoneInput.addEventListener('input', (e) => {
         const cleaned = e.target.value.replace(/\D/g, "");
         resultInput.value = cleaned;
-        status.textContent = ""; // Reset status message when typing
+        status.textContent = ""; 
     });
 
-    // Function to copy text to clipboard
     async function copyToClipboard() {
         if (!resultInput.value) return;
-
         try {
             await navigator.clipboard.writeText(resultInput.value);
-            status.textContent = "Copied to clipboard!";
-            
-            // Clear message after 2 seconds
-            setTimeout(() => {
-                status.textContent = "";
-            }, 2000);
+            status.textContent = "Copied!";
+            setTimeout(() => { status.textContent = ""; }, 2000);
         } catch (err) {
-            status.textContent = "Failed to copy.";
-            status.style.color = "red";
+            status.textContent = "Error";
         }
     }
 </script>
